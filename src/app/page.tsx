@@ -47,6 +47,15 @@ const CUVEEES = [
     charakter: ["Frisch", "Zugänglich", "Lebendig", "Allround"],
     noten: "Grüner Apfel, weißer Pfirsich, florale Noten, lebhafte Perlage.",
   },
+  {
+    id: "millesime-2013",
+    name: "Millésime 2013",
+    typ: "Jahrgangs-Champagner",
+    bild: "/images/bottles/millesime-2013.jpg",
+    beschreibung: "Nur in außergewöhnlichen Jahren gekeltert — der Millésime 2013 ist ein Jahrgangs-Champagner von seltener Tiefe. Zeit, Terroir und Handwerk vereint in einer Flasche, die von einem besonderen Jahr erzählt.",
+    charakter: ["Jahrgang 2013", "Millésime", "Tiefe & Reife", "Selten"],
+    noten: "Reife gelbe Früchte, geröstete Noten, Haselnuss, cremige Perlage, sehr langer Abgang.",
+  },
 ];
 
 export default function HomePage() {
