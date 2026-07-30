@@ -126,13 +126,38 @@ const TEASER_HTML = `<!DOCTYPE html>
 </html>`;
 
 export function middleware(req: NextRequest) {
+  // Voller Live-Betrieb für alle (späterer echter Go-Live)
   if (process.env.SITE_LIVE === "true") {
     return NextResponse.next();
   }
 
-  const { pathname } = req.nextUrl;
+  const url = req.nextUrl;
+  const { pathname } = url;
+  // Vorschau-Schlüssel: per Vercel-Env überschreibbar, sonst fester Standardwert.
+  const token = process.env.PREVIEW_TOKEN || "champagne-vorschau-2026-l4t8";
 
+  // Statische Dateien durchlassen
   if (pathname.includes(".")) {
+    return NextResponse.next();
+  }
+
+  // Private Vorschau: ?vorschau=TOKEN setzt einen Cookie und schaltet die
+  // volle Website nur für diesen Browser frei.
+  if (token && url.searchParams.get("vorschau") === token) {
+    const clean = url.clone();
+    clean.searchParams.delete("vorschau");
+    const res = NextResponse.redirect(clean);
+    res.cookies.set("ci_vorschau", token, {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 30, // 30 Tage
+    });
+    return res;
+  }
+
+  // Gültiger Vorschau-Cookie → volle Website durchlassen
+  if (token && req.cookies.get("ci_vorschau")?.value === token) {
     return NextResponse.next();
   }
 
